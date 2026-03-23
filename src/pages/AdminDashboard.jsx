@@ -33,7 +33,7 @@ export function AdminDashboard() {
       <h1 className="font-display text-2xl font-bold text-gray-800 mb-8">{t('admin.dashboard')}</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-        <StatCard icon={Package} label={t('admin.total_products')} value={Array.isArray(products) ? products.length : products?.count} />
+        <StatCard icon={Package} label={t('admin.total_products')} value={Array.isArray(products) ? products.length : products?.total} />
         <StatCard icon={Tag} label={t('admin.total_categories')} value={categories?.length} />
       </div>
     </>

@@ -11,7 +11,7 @@ export function AdminProductsPage() {
   const { t } = useTranslation();
   const { data: products, isLoading } = useAdminProducts();
 
-  const list = Array.isArray(products) ? products : products?.results || [];
+  const list = Array.isArray(products) ? products : products?.items || [];
 
   return (
     <>
