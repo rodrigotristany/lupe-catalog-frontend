@@ -16,7 +16,7 @@ export function ProductDetail({ product }) {
   const name = localizedField(product, 'name', i18n.language);
   const description = localizedField(product, 'description', i18n.language);
   const cartItem = state.items.find((i) => i.productId === product.id);
-  const images = product.images?.length ? product.images : [{ image: product.primary_image }];
+  const images = product.images?.length ? product.images : [{ image_url: product.primary_image }];
 
   function prev() {
     setActiveIdx((i) => (i - 1 + images.length) % images.length);
@@ -40,7 +40,7 @@ export function ProductDetail({ product }) {
         <div className="flex flex-col gap-3">
           <div className="relative aspect-square rounded-2xl overflow-hidden bg-lupe-100">
             <img
-              src={imageUrl(images[activeIdx]?.image || images[activeIdx]?.path)}
+              src={imageUrl(images[activeIdx]?.image_url)}
               alt={name}
               className="w-full h-full object-cover"
             />
@@ -73,7 +73,7 @@ export function ProductDetail({ product }) {
                   }`}
                 >
                   <img
-                    src={imageUrl(img.image || img.path)}
+                    src={imageUrl(img.image_url)}
                     alt=""
                     className="w-full h-full object-cover"
                   />
