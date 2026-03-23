@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (username, password) => {
     const data = await apiLogin(username, password);
-    const token = data.token || data.access;
+    const token = data.access_token;
     localStorage.setItem('lupe_admin_token', token);
     localStorage.setItem('lupe_admin_username', username);
     setAuth({ token, username, isAuthenticated: true });
