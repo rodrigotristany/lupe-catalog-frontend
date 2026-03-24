@@ -22,8 +22,8 @@ export function CatalogPage() {
   const { data: categories = [] } = useCategories();
 
   const title = i18n.language === 'es'
-    ? 'LUPE — Artesanías Hechas a Mano'
-    : 'LUPE — Handmade Crafts';
+    ? 'LUPE — Objetos para llevar de belleza lo cotidiano'
+    : 'LUPE — Objects to fill the everyday with beauty';
 
   return (
     <>

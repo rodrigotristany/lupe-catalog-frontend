@@ -20,9 +20,9 @@ export function CategoryFilter({ categories = [], selected, onSelect }) {
       {categories.map((cat) => (
         <button
           key={cat.id}
-          onClick={() => onSelect(cat.id)}
+          onClick={() => onSelect(cat.slug)}
           className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-            selected === cat.id
+            selected === cat.slug
               ? 'bg-lupe-500 text-white'
               : 'bg-lupe-100 text-lupe-700 hover:bg-lupe-200'
           }`}

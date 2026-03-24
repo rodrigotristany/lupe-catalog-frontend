@@ -20,7 +20,7 @@ export function ProductForm({ product }) {
     description_es: product?.description_es || '',
     description_en: product?.description_en || '',
     price: product?.price || '',
-    category: product?.category || '',
+    category_id: product?.category?.id ?? '',
     is_active: product?.is_active ?? true,
   });
 
@@ -42,7 +42,11 @@ export function ProductForm({ product }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    mutation.mutate(form);
+    const payload = {
+      ...form,
+      category_id: form.category_id !== '' ? parseInt(form.category_id, 10) : null,
+    };
+    mutation.mutate(payload);
   }
 
   return (
@@ -86,8 +90,8 @@ export function ProductForm({ product }) {
         />
         <Select
           label={t('admin.category')}
-          value={form.category}
-          onChange={(e) => set('category', e.target.value)}
+          value={form.category_id}
+          onChange={(e) => set('category_id', e.target.value)}
         >
           <option value="">—</option>
           {categories.map((cat) => (

@@ -99,10 +99,10 @@ export function ProductDetail({ product }) {
             </div>
           )}
 
-          {product.category_name && (
+          {product.category && (
             <p className="text-sm text-gray-500">
               <span className="font-medium">{t('product.category')}: </span>
-              {product.category_name}
+              {localizedField(product.category, 'name', i18n.language)}
             </p>
           )}
 
