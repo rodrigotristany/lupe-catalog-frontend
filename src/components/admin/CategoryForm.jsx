@@ -18,8 +18,10 @@ export function CategoryForm({ category, onDone }) {
 
   const mutation = useMutation({
     mutationFn: (data) => isEdit ? updateCategory(category.id, data) : createCategory(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
+    onSuccess: (saved) => {
+      queryClient.setQueryData(['categories'], (old = []) =>
+        isEdit ? old.map((c) => (c.id === category.id ? saved : c)) : [...old, saved]
+      );
       toast.success(t(isEdit ? 'admin.updated' : 'admin.created'));
       onDone?.();
     },

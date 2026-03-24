@@ -16,8 +16,8 @@ export function CategoryTable({ categories = [] }) {
 
   const deleteMutation = useMutation({
     mutationFn: deleteCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
+    onSuccess: (_, id) => {
+      queryClient.setQueryData(['categories'], (old = []) => old.filter((c) => c.id !== id));
       toast.success(t('admin.deleted'));
       setDeleteId(null);
     },
