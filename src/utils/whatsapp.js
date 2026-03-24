@@ -1,4 +1,3 @@
-import { localizedField } from './i18nField';
 import { formatPrice } from './formatPrice';
 
 export function buildWhatsAppUrl(cartItems, settings, language) {
@@ -7,7 +6,7 @@ export function buildWhatsAppUrl(cartItems, settings, language) {
   const footer = isEs ? '¡Gracias!' : 'Thank you!';
 
   const lines = cartItems.map((item) => {
-    const name = localizedField(item, 'name', language);
+    const name = (language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
     const lineTotal = formatPrice(parseFloat(item.price) * item.quantity);
     return `${item.quantity}x  ${name.padEnd(20)} ${lineTotal}`;
   });
