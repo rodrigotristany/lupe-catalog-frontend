@@ -26,7 +26,7 @@ export async function deleteProduct(id) {
 }
 
 export async function getProductHistory(id) {
-  const { data } = await client.get(`/admin/products/${id}/history/`);
+  const { data } = await client.get(`/admin/products/${id}/history/`, { params: { limit: 10 } });
   return data;
 }
 

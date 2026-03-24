@@ -12,7 +12,7 @@ export function Footer() {
         <div className="text-center">
           <p className="font-display text-xl font-semibold text-lupe-100 mb-1">{storeName}</p>
           <p className="text-sm text-lupe-400">
-            &copy; {new Date().getFullYear()} {storeName}. Artesanías hechas a mano con amor.
+            &copy; {new Date().getFullYear()} {storeName}. Belleza en lo cotidiano.
           </p>
         </div>
       </div>

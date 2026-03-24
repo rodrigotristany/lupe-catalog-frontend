@@ -69,7 +69,7 @@ export function ImageUploader({ productId, existingImages = [] }) {
         <div className="flex flex-wrap gap-3">
           {existingImages.map((img) => (
             <div key={img.id} className="relative group w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
-              <img src={imageUrl(img.image || img.path)} alt="" className="w-full h-full object-cover" />
+              <img src={imageUrl(img.image_url || img.image_path)} alt="" className="w-full h-full object-cover" />
               <button
                 onClick={() => setDeleteId(img.id)}
                 className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"

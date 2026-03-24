@@ -59,7 +59,7 @@ export function ProductHistory({ productId }) {
                 {actionLabel(entry.action, t)}
               </span>
               <span className="text-xs text-gray-400">
-                {new Date(entry.timestamp).toLocaleString()}
+                {new Date(entry.changed_at).toLocaleString()}
               </span>
               {entry.changed_by && (
                 <span className="text-xs text-gray-400">
