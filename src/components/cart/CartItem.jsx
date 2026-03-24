@@ -1,14 +1,13 @@
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { imageUrl } from '../../utils/imageUrl';
-import { localizedField } from '../../utils/i18nField';
 import { formatPrice } from '../../utils/formatPrice';
 import { useCart } from '../../hooks/useCart';
 
 export function CartItem({ item }) {
   const { t, i18n } = useTranslation();
   const { dispatch } = useCart();
-  const name = localizedField(item, 'name', i18n.language);
+  const name = (i18n.language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
 
   return (
     <div className="flex gap-3 py-3 border-b border-lupe-100 last:border-0">
