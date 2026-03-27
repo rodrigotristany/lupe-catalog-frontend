@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Check } from 'lucide-react';
+import { ShoppingCart, Check, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { imageUrl } from '../../utils/imageUrl';
 import { localizedField } from '../../utils/i18nField';
@@ -39,11 +39,23 @@ export function ProductCard({ product }) {
           <p className="text-lupe-600 font-semibold mt-1">{formatPrice(product.price)}</p>
         </div>
 
+        {/* Mobile: icon-only button */}
         <Button
           variant={cartItem ? 'secondary' : 'primary'}
           size="sm"
           onClick={handleAddToCart}
-          className="w-full"
+          className="w-full sm:hidden"
+          aria-label={cartItem ? t('catalog.in_cart', { count: cartItem.quantity }) : t('catalog.add_to_cart')}
+        >
+          {cartItem ? <Check size={16} /> : <><ShoppingCart size={16} /><Plus size={12} /></>}
+        </Button>
+
+        {/* Desktop: full label button */}
+        <Button
+          variant={cartItem ? 'secondary' : 'primary'}
+          size="sm"
+          onClick={handleAddToCart}
+          className="w-full hidden sm:flex"
         >
           {cartItem ? (
             <>
