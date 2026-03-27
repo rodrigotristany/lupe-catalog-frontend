@@ -9,6 +9,9 @@
     "search_placeholder": "Buscar productos...",
     "all_categories": "Todas",
     "no_results": "No se encontraron productos",
+    "prev_page": "Página anterior",
+    "next_page": "Página siguiente",
+    "page_of": "{{page}} / {{pages}}",
     "add_to_cart": "Agregar al carrito",
     "in_cart": "En carrito ({{count}})"
   },

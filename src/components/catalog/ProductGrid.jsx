@@ -32,20 +32,20 @@ export function ProductGrid({ products, isLoading, pagination, onPageChange }) {
             onClick={() => onPageChange(pagination.page - 1)}
             disabled={pagination.page <= 1}
             className="p-2 rounded-lg border border-lupe-200 text-lupe-700 hover:bg-lupe-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            aria-label={t('catalog.prev_page', 'Previous page')}
+            aria-label={t('catalog.prev_page')}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
 
           <span className="text-sm text-lupe-600">
-            {t('catalog.page_of', { page: pagination.page, pages: pagination.pages }, `${pagination.page} / ${pagination.pages}`)}
+            {t('catalog.page_of', { page: pagination.page, pages: pagination.pages })}
           </span>
 
           <button
             onClick={() => onPageChange(pagination.page + 1)}
             disabled={pagination.page >= pagination.pages}
             className="p-2 rounded-lg border border-lupe-200 text-lupe-700 hover:bg-lupe-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            aria-label={t('catalog.next_page', 'Next page')}
+            aria-label={t('catalog.next_page')}
           >
             <ChevronRight className="w-5 h-5" />
           </button>

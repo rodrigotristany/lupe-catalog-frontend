@@ -9,6 +9,9 @@
     "search_placeholder": "Search products...",
     "all_categories": "All",
     "no_results": "No products found",
+    "prev_page": "Previous page",
+    "next_page": "Next page",
+    "page_of": "{{page}} / {{pages}}",
     "add_to_cart": "Add to cart",
     "in_cart": "In cart ({{count}})"
   },
