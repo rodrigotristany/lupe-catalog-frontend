@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useProducts } from '../hooks/useProducts';
@@ -21,6 +21,8 @@ export function CatalogPage() {
   const filters = { page, per_page: 20 };
   if (debouncedSearch) filters.search = debouncedSearch;
   if (selectedCategory) filters.category = selectedCategory;
+
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [page]);
 
   const { data, isLoading } = useProducts(filters);
   const products = data?.items ?? [];
