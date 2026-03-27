@@ -1,18 +1,18 @@
 import client from './client';
 
 export async function login(username, password) {
-  const { data } = await client.post('/admin/login/', { username, password });
+  const { data } = await client.post('/admin/login', { username, password });
   return data;
 }
 
 // Products
 export async function getAdminProducts(filters = {}) {
-  const { data } = await client.get('/admin/products/', { params: filters });
+  const { data } = await client.get('/admin/products', { params: filters });
   return data;
 }
 
 export async function createProduct(payload) {
-  const { data } = await client.post('/admin/products/', payload);
+  const { data } = await client.post('/admin/products', payload);
   return data;
 }
 
@@ -22,7 +22,7 @@ export async function updateProduct(id, payload) {
 }
 
 export async function deleteProduct(id) {
-  await client.delete(`/admin/products/${id}/`);
+  await client.delete(`/admin/products/${id}`);
 }
 
 export async function getProductHistory(id) {
