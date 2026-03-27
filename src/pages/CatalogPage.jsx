@@ -12,13 +12,19 @@ export function CatalogPage() {
   const { t, i18n } = useTranslation();
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search, 300);
 
-  const filters = {};
+  function handleSearchChange(value) { setSearch(value); setPage(1); }
+  function handleCategorySelect(value) { setSelectedCategory(value); setPage(1); }
+
+  const filters = { page, per_page: 20 };
   if (debouncedSearch) filters.search = debouncedSearch;
   if (selectedCategory) filters.category = selectedCategory;
 
-  const { data: products, isLoading } = useProducts(filters);
+  const { data, isLoading } = useProducts(filters);
+  const products = data?.items ?? [];
+  const pagination = data ? { page: data.page, pages: data.pages, total: data.total } : null;
   const { data: categories = [] } = useCategories();
 
   const title = i18n.language === 'es'
@@ -38,17 +44,22 @@ export function CatalogPage() {
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
-            <SearchBar value={search} onChange={setSearch} />
+            <SearchBar value={search} onChange={handleSearchChange} />
           </div>
         </div>
 
         <CategoryFilter
           categories={categories}
           selected={selectedCategory}
-          onSelect={setSelectedCategory}
+          onSelect={handleCategorySelect}
         />
 
-        <ProductGrid products={products} isLoading={isLoading} />
+        <ProductGrid
+          products={products}
+          isLoading={isLoading}
+          pagination={pagination}
+          onPageChange={setPage}
+        />
       </div>
     </>
   );
