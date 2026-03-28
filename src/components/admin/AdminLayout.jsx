@@ -16,7 +16,7 @@ export function AdminLayout() {
   const { logout, username } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
       <aside className="w-56 bg-lupe-blue text-white flex flex-col flex-shrink-0">
         <div className="p-5 border-b border-white/10">
