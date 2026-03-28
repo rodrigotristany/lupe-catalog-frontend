@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useCart } from '../../hooks/useCart';
 import { CartDrawer } from '../cart/CartDrawer';
 import { useSettings } from '../../hooks/useSettings';
+import lupeLogo from '../../assets/lupe_magenta.svg';
 
 export function Navbar() {
   const { t, i18n } = useTranslation();
@@ -27,7 +28,7 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/">
-              <img src="/logo.png" alt="LUPE" className="h-10 w-auto" />
+              <img src={lupeLogo} alt="LUPE" className="h-10 w-auto" />
             </Link>
 
             <nav className="flex items-center gap-2">
