@@ -36,24 +36,24 @@
 
 ### 3.1 Navbar / Header
 
-- Remove the hardcoded `LUPE` text.
-- Replace with a `<img>` logo component (asset TBD — placeholder until logo is provided).
+- Remove the hardcoded `LUPE` text; replace with `<img src="/logo.png" alt="LUPE" />` (placeholder until asset is delivered).
 - Background: white (`#FFFFFF`).
+- Bottom border: Dark Blue `#094584`.
 - Nav links: Dark Blue `#094584`.
 
 ### 3.2 Add to Cart Button
 
-| Property         | Value                    |
-|------------------|--------------------------|
-| Background       | Pink/Magenta `#F00063`   |
-| Text color       | Dark Blue `#094584`      |
-| Hover background | Slightly darker pink (e.g. `#cc0055`) |
-| Font weight      | Bold (`font-bold`)       |
-| Border radius    | Rounded (`rounded-lg`)   |
+| Property         | Value                          |
+|------------------|--------------------------------|
+| Background       | Light Pink `#F49EC4`           |
+| Text color       | Dark Blue `#094584`            |
+| Hover background | Pink/Magenta `#F00063`         |
+| Font weight      | Bold (`font-bold`)             |
+| Border radius    | Rounded (`rounded-lg`)         |
 
 ```html
 <!-- Example Tailwind classes -->
-<button class="bg-[#F00063] text-[#094584] font-bold rounded-lg px-4 py-2 hover:bg-[#cc0055] transition-colors">
+<button class="bg-lupe-light-pink hover:bg-lupe-pink text-lupe-blue font-bold rounded-lg px-4 py-2 transition-colors">
   Add to Cart
 </button>
 ```
@@ -77,13 +77,40 @@
 </button>
 ```
 
-### 3.4 Footer
+### 3.4 Search Bar
 
 | Property       | Value                  |
 |----------------|------------------------|
-| Background     | Dark Blue `#094584`    |
-| Text color     | White `#FFFFFF`        |
-| Link color     | Light Pink `#F49EC4`   |
+| Border         | Dark Blue `#094584`    |
+| Focus ring     | Dark Blue `#094584`    |
+| Background     | White `#FFFFFF`        |
+
+### 3.5 Navbar Separator
+
+- Bottom border of the sticky header: Dark Blue `#094584` (`border-lupe-blue`)
+
+### 3.6 Product Card
+
+| Property              | Value                        |
+|-----------------------|------------------------------|
+| Border                | Light Gray `gray-200`        |
+| Image placeholder bg  | Light Blue `#C5D8F0`         |
+| Price text color      | Dark Blue `#094584`          |
+| Border radius         | `rounded-2xl`                |
+
+### 3.7 Pagination Buttons
+
+| Property | Value             |
+|----------|-------------------|
+| Border   | Light Gray `gray-200` |
+
+### 3.8 Footer
+
+| Property        | Value                  |
+|-----------------|------------------------|
+| Background      | Dark Blue `#094584`    |
+| Text color      | White `#FFFFFF`        |
+| Copyright color | Light Pink `#F49EC4`   |
 
 - Remove the hardcoded `LUPE` text.
 - Replace with the same `<img>` logo component used in the Navbar (white/inverted variant if available).
