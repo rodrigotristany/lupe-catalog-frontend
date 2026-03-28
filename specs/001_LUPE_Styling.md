@@ -2,7 +2,7 @@
 
 **Status:** Implemented
 **Date:** 2026-03-28
-**Scope:** Public-facing catalog UI (Navbar, Product Grid, Filters, Footer)
+**Scope:** Public-facing catalog UI (Navbar, Product Grid, Filters, Footer) + Admin panel
 
 ---
 
@@ -274,9 +274,58 @@ Usage in markup:
 
 ---
 
-## 7. Out of Scope (this spec)
+## 7. Admin Panel Styling
 
-- Product card layout changes.
-- Admin panel styling.
+The admin panel uses the same brand color palette and Colab font as the public catalog. The orange `lupe-*` numeric scale (50–900) is **not used** in admin UI — all colors reference the named brand tokens.
+
+### 7.1 Admin Sidebar (`AdminLayout`)
+
+| Element              | Value                                      |
+|----------------------|--------------------------------------------|
+| Background           | Dark Blue `bg-lupe-blue`                   |
+| Section borders      | `border-white/10`                          |
+| Active nav item      | `bg-white/20 text-white`                   |
+| Inactive nav text    | Light Blue `text-lupe-light-blue`          |
+| Inactive nav hover   | `hover:bg-white/10 hover:text-white`       |
+| Logout button text   | Light Blue `text-lupe-light-blue`          |
+| Logo                 | `lupe_pink.svg` (light on dark bg), `h-8 w-auto` |
+| Username label       | Light Blue `text-lupe-light-blue`          |
+
+### 7.2 Admin Login Page (`AdminLoginPage`)
+
+| Element         | Value                              |
+|-----------------|------------------------------------|
+| Page background | Light Blue `bg-lupe-light-blue`    |
+| Card            | White, `rounded-2xl shadow-md`     |
+| Logo            | `lupe_magenta.svg`, `h-10 w-auto mx-auto mb-6` |
+
+### 7.3 Admin Dashboard (`AdminDashboard`)
+
+| Element           | Value                               |
+|-------------------|-------------------------------------|
+| Stat card icon bg | Light Blue `bg-lupe-light-blue`     |
+| Stat card icon    | Dark Blue `text-lupe-blue`          |
+| Page heading      | `font-colab font-bold text-gray-800` |
+
+### 7.4 Shared UI — Button variants (`Button.jsx`)
+
+| Variant    | Background              | Text color          | Hover                   |
+|------------|-------------------------|---------------------|-------------------------|
+| `primary`  | Light Pink `#F49EC4`    | Dark Blue `#094584` | `scale-105`             |
+| `secondary`| Light Blue `#C5D8F0`    | Dark Blue `#094584` | `bg-[#b0c8e8]`          |
+| `ghost`    | Transparent             | Dark Blue `#094584` | `hover:bg-lupe-light-blue` |
+| `outline`  | Transparent             | Dark Blue `#094584` | `hover:bg-lupe-light-blue`, border `lupe-blue` |
+| `danger`   | `red-600`               | White               | `hover:bg-red-700`      |
+
+### 7.5 Product Table
+
+| Element      | Value                        |
+|--------------|------------------------------|
+| Price text   | Dark Blue `text-lupe-blue`   |
+
+---
+
+## 8. Out of Scope (this spec)
+
 - Mobile-specific breakpoints (handled separately).
 - Typography scale changes beyond font family.
