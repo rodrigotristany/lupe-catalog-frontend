@@ -143,13 +143,32 @@ colors: {
 
 ## 5. Logo Placement
 
-| Location | Element              | Notes                                      |
-|----------|----------------------|--------------------------------------------|
-| Navbar   | Left-aligned         | Replace `<span>LUPE</span>` with `<img>`   |
-| Footer   | Centered or left     | Use white/inverted logo variant on blue bg |
+Three SVG variants are available as local assets in `src/assets/`:
 
-- Logo asset is **not yet provided**. Use a placeholder `<img src="/logo.png" alt="LUPE" />` until the final asset is delivered.
-- Logo file should be placed in `public/` so Vite serves it at `/logo.png`.
+| File                | Color             | Usage                          |
+|---------------------|-------------------|--------------------------------|
+| `lupe_magenta.svg`  | Magenta `#F00063` | Navbar (white background)      |
+| `lupe_pink.svg`     | Light Pink `#F49EC4` | Footer (dark blue background) |
+| `lupe_blue.svg`     | Dark Blue `#094584` | Reserved / alternate use      |
+
+| Location | Element      | Asset imported          | Alignment     |
+|----------|--------------|-------------------------|---------------|
+| Navbar   | Left-aligned | `lupe_magenta.svg`      | `h-10 w-auto` |
+| Footer   | Centered     | `lupe_pink.svg`         | `h-10 w-auto mx-auto mb-3` |
+
+**Implementation:** import as ES module in each component — Vite bundles and hashes them automatically.
+
+```js
+// Navbar.jsx
+import lupeLogo from '../../assets/lupe_magenta.svg';
+
+// Footer.jsx
+import lupeLogo from '../../assets/lupe_pink.svg';
+```
+
+```html
+<img src={lupeLogo} alt="LUPE" className="h-10 w-auto" />
+```
 
 ---
 
@@ -176,7 +195,7 @@ Add the following to `src/index.css` (before the Tailwind directives or in a ded
 ```css
 @font-face {
   font-family: 'Colab';
-  src: url('@/assets/fonts/ColabThi.otf') format('opentype');
+  src: url('./assets/fonts/ColabThi.otf') format('opentype');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -184,7 +203,7 @@ Add the following to `src/index.css` (before the Tailwind directives or in a ded
 
 @font-face {
   font-family: 'Colab';
-  src: url('@/assets/fonts/ColabLig.otf') format('opentype');
+  src: url('./assets/fonts/ColabLig.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -192,7 +211,7 @@ Add the following to `src/index.css` (before the Tailwind directives or in a ded
 
 @font-face {
   font-family: 'Colab';
-  src: url('@/assets/fonts/ColabReg.otf') format('opentype');
+  src: url('./assets/fonts/ColabReg.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -200,7 +219,7 @@ Add the following to `src/index.css` (before the Tailwind directives or in a ded
 
 @font-face {
   font-family: 'Colab';
-  src: url('@/assets/fonts/ColabMed.otf') format('opentype');
+  src: url('./assets/fonts/ColabMed.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -208,14 +227,14 @@ Add the following to `src/index.css` (before the Tailwind directives or in a ded
 
 @font-face {
   font-family: 'Colab';
-  src: url('@/assets/fonts/ColabBol.otf') format('opentype');
+  src: url('./assets/fonts/ColabBol.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 ```
 
-> `@/` resolves to `src/` via the Vite alias already configured in `vite.config.js`.
+> Paths are relative to `src/index.css`.
 
 ### 6.3 Tailwind Config
 
@@ -251,7 +270,7 @@ Usage in markup:
 | Captions / metadata      | Light (300)    | `font-colab font-light`        |
 | Decorative / display     | Thin (100)     | `font-colab font-thin`         |
 
-> The current Global Layout (section 2) lists Inter and Playfair Display as active fonts. Migration to Colab as the primary body font is a separate implementation decision.
+> Colab is the active body font — applied globally via `font-colab` on the `body` rule in `src/index.css`. Inter and Playfair Display remain as fallbacks in the Tailwind config.
 
 ---
 
