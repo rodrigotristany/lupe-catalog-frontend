@@ -1,10 +1,51 @@
+/* Colab custom font family */
+@font-face {
+  font-family: 'Colab';
+  src: url('./assets/fonts/ColabThi.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('./assets/fonts/ColabLig.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('./assets/fonts/ColabReg.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('./assets/fonts/ColabMed.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('./assets/fonts/ColabBol.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-lupe-50 text-gray-800 font-sans;
+    @apply bg-white text-gray-800 font-colab;
   }
 }
 

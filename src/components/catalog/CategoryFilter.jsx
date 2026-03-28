@@ -16,7 +16,7 @@ export function CategoryFilter({ categories = [], selected, onSelect }) {
       <button
         onClick={() => { onSelect(null); setOpen(false); }}
         className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-          !selected ? 'bg-lupe-500 text-white' : 'bg-lupe-100 text-lupe-700 hover:bg-lupe-200'
+          !selected ? 'bg-lupe-blue text-white' : 'bg-lupe-light-blue text-lupe-blue hover:bg-lupe-blue hover:text-white'
         }`}
       >
         {t('catalog.all_categories')}
@@ -28,8 +28,8 @@ export function CategoryFilter({ categories = [], selected, onSelect }) {
           onClick={() => { onSelect(cat.slug); setOpen(false); }}
           className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
             selected === cat.slug
-              ? 'bg-lupe-500 text-white'
-              : 'bg-lupe-100 text-lupe-700 hover:bg-lupe-200'
+              ? 'bg-lupe-blue text-white'
+              : 'bg-lupe-light-blue text-lupe-blue hover:bg-lupe-blue hover:text-white'
           }`}
         >
           {localizedField(cat, 'name', i18n.language)}

@@ -22,9 +22,9 @@ export function ProductCard({ product }) {
   return (
     <Link
       to={`/product/${product.id}`}
-      className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col"
+      className="group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col"
     >
-      <div className="aspect-square overflow-hidden bg-lupe-100">
+      <div className="aspect-square overflow-hidden bg-lupe-light-blue">
         <img
           src={imageUrl(product.primary_image)}
           alt={name}
@@ -36,23 +36,23 @@ export function ProductCard({ product }) {
       <div className="p-4 flex flex-col gap-3 flex-1">
         <div className="flex-1">
           <h3 className="font-medium text-gray-800 line-clamp-2 leading-snug">{name}</h3>
-          <p className="text-lupe-600 font-semibold mt-1">{formatPrice(product.price)}</p>
+          <p className="text-lupe-blue font-semibold mt-1">{formatPrice(product.price)}</p>
         </div>
 
         {/* Mobile: icon-only button */}
         <Button
-          variant={cartItem ? 'secondary' : 'primary'}
+          variant="primary"
           size="sm"
           onClick={handleAddToCart}
           className="w-full sm:hidden"
           aria-label={cartItem ? t('catalog.in_cart', { count: cartItem.quantity }) : t('catalog.add_to_cart')}
         >
-          {cartItem ? <Check size={16} /> : <><ShoppingCart size={16} /><Plus size={12} /></>}
+          {cartItem ? <Check size={16} /> : <><ShoppingCart size={16} /></>}
         </Button>
 
         {/* Desktop: full label button */}
         <Button
-          variant={cartItem ? 'secondary' : 'primary'}
+          variant="primary"
           size="sm"
           onClick={handleAddToCart}
           className="w-full hidden sm:flex"
