@@ -12,7 +12,7 @@ export function SearchBar({ value, onChange }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={t('catalog.search_placeholder')}
-        className="w-full pl-9 pr-9 py-2 rounded-xl border border-lupe-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent"
+        className="w-full pl-9 pr-9 py-2 rounded-xl border border-lupe-blue bg-white text-sm focus:outline-none focus:ring-2 focus:ring-lupe-blue focus:border-transparent"
       />
       {value && (
         <button

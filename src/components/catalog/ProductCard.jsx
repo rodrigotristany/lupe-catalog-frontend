@@ -22,9 +22,9 @@ export function ProductCard({ product }) {
   return (
     <Link
       to={`/product/${product.id}`}
-      className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col"
+      className="group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col"
     >
-      <div className="aspect-square overflow-hidden bg-lupe-100">
+      <div className="aspect-square overflow-hidden bg-lupe-light-blue">
         <img
           src={imageUrl(product.primary_image)}
           alt={name}
@@ -36,7 +36,7 @@ export function ProductCard({ product }) {
       <div className="p-4 flex flex-col gap-3 flex-1">
         <div className="flex-1">
           <h3 className="font-medium text-gray-800 line-clamp-2 leading-snug">{name}</h3>
-          <p className="text-lupe-600 font-semibold mt-1">{formatPrice(product.price)}</p>
+          <p className="text-lupe-blue font-semibold mt-1">{formatPrice(product.price)}</p>
         </div>
 
         {/* Mobile: icon-only button */}

@@ -15,6 +15,10 @@ module.exports = {
           700: '#a14a20',
           800: '#833b20',
           900: '#6b331d',
+          blue:         '#094584',
+          pink:         '#F00063',
+          'light-blue': '#C5D8F0',
+          'light-pink': '#F49EC4',
         },
       },
       fontFamily: {

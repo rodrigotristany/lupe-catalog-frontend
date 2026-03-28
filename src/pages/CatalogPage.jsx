@@ -42,7 +42,7 @@ export function CatalogPage() {
       </Helmet>
 
       <div className="space-y-6">
-        <h1 className="font-display text-3xl font-bold text-lupe-800">{t('catalog.title')}</h1>
+        <h1 className="font-display text-3xl font-bold text-lupe-blue text-center">{t('catalog.title')}</h1>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
