@@ -1,6 +1,6 @@
 # 001_LUPE_Styling — Frontend Styling Specification
 
-**Status:** Draft
+**Status:** Implemented
 **Date:** 2026-03-28
 **Scope:** Public-facing catalog UI (Navbar, Product Grid, Filters, Footer)
 
@@ -43,17 +43,20 @@
 
 ### 3.2 Add to Cart Button
 
-| Property         | Value                          |
-|------------------|--------------------------------|
-| Background       | Light Pink `#F49EC4`           |
-| Text color       | Dark Blue `#094584`            |
-| Hover background | Pink/Magenta `#F00063`         |
-| Font weight      | Bold (`font-bold`)             |
-| Border radius    | Rounded (`rounded-lg`)         |
+| Property         | Value                                        |
+|------------------|----------------------------------------------|
+| Background       | Light Pink `#F49EC4`                         |
+| Text color       | Dark Blue `#094584`                          |
+| Hover background | No color change (stays light pink)           |
+| Hover effect     | Scale up `scale-105`                         |
+| Click effect     | Scale down `active:scale-95`                 |
+| Focus ring       | None                                         |
+| Font weight      | Bold (`font-bold`)                           |
+| Border radius    | Rounded (`rounded-lg`)                       |
 
 ```html
 <!-- Example Tailwind classes -->
-<button class="bg-lupe-light-pink hover:bg-lupe-pink text-lupe-blue font-bold rounded-lg px-4 py-2 transition-colors">
+<button class="bg-lupe-light-pink text-lupe-blue font-bold rounded-lg px-4 py-2 hover:scale-105 active:scale-95 transition-transform duration-150">
   Add to Cart
 </button>
 ```
@@ -122,14 +125,15 @@
 The existing `tailwind.config.js` defines a `lupe-*` color scale. The following values should be mapped or added to align with the brand palette:
 
 ```js
-// tailwind.config.js — suggested additions/updates
+// tailwind.config.js — implemented additions
 colors: {
   lupe: {
-    pink:       '#F00063',  // CTA buttons
-    blue:       '#094584',  // Primary blue
-    'light-pink': '#F49EC4', // Inactive filters
-    orange:     '#F09000',
-    red:        '#F01000',
+    blue:         '#094584',  // Primary blue
+    pink:         '#F00063',  // Magenta accent
+    'light-pink': '#F49EC4',  // CTA button bg, footer copyright
+    'light-blue': '#C5D8F0',  // Inactive filter bg, image placeholders
+    orange:       '#F09000',
+    red:          '#F01000',
     'orange-red': '#F03800',
   }
 }
@@ -149,7 +153,109 @@ colors: {
 
 ---
 
-## 6. Out of Scope (this spec)
+## 6. Custom Font — Colab Family
+
+The project uses a custom typeface called **Colab**, self-hosted as `.otf` files. Five weight variants are included.
+
+### 6.1 Font Files
+
+Place all files in `src/assets/fonts/`:
+
+| File            | Weight name | CSS `font-weight` |
+|-----------------|-------------|-------------------|
+| `ColabThi.otf`  | Thin        | 100               |
+| `ColabLig.otf`  | Light       | 300               |
+| `ColabReg.otf`  | Regular     | 400               |
+| `ColabMed.otf`  | Medium      | 500               |
+| `ColabBol.otf`  | Bold        | 700               |
+
+### 6.2 `@font-face` Declarations
+
+Add the following to `src/index.css` (before the Tailwind directives or in a dedicated `:root` block):
+
+```css
+@font-face {
+  font-family: 'Colab';
+  src: url('@/assets/fonts/ColabThi.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('@/assets/fonts/ColabLig.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('@/assets/fonts/ColabReg.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('@/assets/fonts/ColabMed.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colab';
+  src: url('@/assets/fonts/ColabBol.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+```
+
+> `@/` resolves to `src/` via the Vite alias already configured in `vite.config.js`.
+
+### 6.3 Tailwind Config
+
+Extend the `fontFamily` key in `tailwind.config.js` to expose `font-colab`:
+
+```js
+theme: {
+  extend: {
+    fontFamily: {
+      colab: ['Colab', 'sans-serif'],
+    },
+  },
+},
+```
+
+Usage in markup:
+
+```html
+<p class="font-colab font-thin">Thin (100)</p>
+<p class="font-colab font-light">Light (300)</p>
+<p class="font-colab font-normal">Regular (400)</p>
+<p class="font-colab font-medium">Medium (500)</p>
+<p class="font-colab font-bold">Bold (700)</p>
+```
+
+### 6.4 Usage Guidelines
+
+| Context                  | Variant        | Tailwind classes               |
+|--------------------------|----------------|--------------------------------|
+| Body / product text      | Regular (400)  | `font-colab font-normal`       |
+| Labels / nav links       | Medium (500)   | `font-colab font-medium`       |
+| Headings / product names | Bold (700)     | `font-colab font-bold`         |
+| Captions / metadata      | Light (300)    | `font-colab font-light`        |
+| Decorative / display     | Thin (100)     | `font-colab font-thin`         |
+
+> The current Global Layout (section 2) lists Inter and Playfair Display as active fonts. Migration to Colab as the primary body font is a separate implementation decision.
+
+---
+
+## 7. Out of Scope (this spec)
 
 - Product card layout changes.
 - Admin panel styling.
