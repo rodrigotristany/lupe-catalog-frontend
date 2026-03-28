@@ -33,10 +33,10 @@ export function CartSummary() {
   }
 
   return (
-    <div className="pt-4 border-t border-lupe-100 space-y-3">
+    <div className="pt-4 border-t border-lupe-blue space-y-3">
       <div className="flex justify-between font-semibold text-lg">
         <span>{t('cart.total')}</span>
-        <span className="text-lupe-600">{formatPrice(total)}</span>
+        <span className="text-lupe-blue">{formatPrice(total)}</span>
       </div>
 
       <Button onClick={handlePurchase} size="lg" className="w-full">
@@ -44,7 +44,7 @@ export function CartSummary() {
         {t('cart.purchase')}
       </Button>
 
-      <Button onClick={handleCopy} variant="outline" size="md" className="w-full">
+      <Button onClick={handleCopy} variant="outline" size="md" className="w-full border-lupe-blue text-lupe-blue hover:bg-white">
         <Copy size={15} />
         {t('cart.copy_order')}
       </Button>

@@ -36,7 +36,7 @@ export function CartDrawer({ isOpen, onClose }) {
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-lupe-100">
+        <div className="flex items-center justify-between p-4 border-b border-lupe-blue">
           <h2 className="font-semibold text-gray-800 text-lg">{t('cart.title')}</h2>
           <button
             onClick={onClose}
@@ -50,7 +50,7 @@ export function CartDrawer({ isOpen, onClose }) {
         <div className="flex-1 overflow-y-auto p-4">
           {state.items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-              <ShoppingBag size={48} className="text-lupe-200" />
+              <ShoppingBag size={48} className="text-lupe-light-blue" />
               <p className="text-gray-500">{t('cart.empty')}</p>
               <Button variant="secondary" onClick={onClose} as={Link} to="/">
                 {t('cart.empty_cta')}
@@ -64,7 +64,7 @@ export function CartDrawer({ isOpen, onClose }) {
         </div>
 
         {state.items.length > 0 && (
-          <div className="p-4 border-t border-lupe-100">
+          <div className="p-4 border-t border-lupe-blue">
             <CartSummary />
           </div>
         )}

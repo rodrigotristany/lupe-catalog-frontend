@@ -33,7 +33,7 @@ export function Navbar() {
             <nav className="flex items-center gap-2">
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-lupe-50 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600"
                 aria-label="Toggle language"
               >
                 <Globe size={16} />
@@ -42,13 +42,13 @@ export function Navbar() {
 
               <button
                 onClick={() => setCartOpen(true)}
-                className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-lupe-50 transition-colors"
+                className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-700"
                 aria-label={t('nav.cart')}
               >
                 <ShoppingCart size={20} />
                 <span className="hidden sm:inline">{t('nav.cart')}</span>
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-lupe-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-lupe-blue text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {totalItems > 99 ? '99+' : totalItems}
                   </span>
                 )}

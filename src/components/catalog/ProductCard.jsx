@@ -41,7 +41,7 @@ export function ProductCard({ product }) {
 
         {/* Mobile: icon-only button */}
         <Button
-          variant={cartItem ? 'secondary' : 'primary'}
+          variant="primary"
           size="sm"
           onClick={handleAddToCart}
           className="w-full sm:hidden"
@@ -52,7 +52,7 @@ export function ProductCard({ product }) {
 
         {/* Desktop: full label button */}
         <Button
-          variant={cartItem ? 'secondary' : 'primary'}
+          variant="primary"
           size="sm"
           onClick={handleAddToCart}
           className="w-full hidden sm:flex"

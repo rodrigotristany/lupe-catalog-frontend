@@ -29,7 +29,7 @@ export function ProductDetail({ product }) {
     <div className="max-w-4xl mx-auto">
       <Link
         to="/"
-        className="inline-flex items-center gap-1 text-sm text-lupe-600 hover:text-lupe-800 mb-6"
+        className="inline-flex items-center gap-1 text-sm text-lupe-blue hover:text-lupe-blue mb-6"
       >
         <ArrowLeft size={16} />
         {t('product.back')}
@@ -38,7 +38,7 @@ export function ProductDetail({ product }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Image gallery */}
         <div className="flex flex-col gap-3">
-          <div className="relative aspect-square rounded-2xl overflow-hidden bg-lupe-100">
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-lupe-light-blue">
             <img
               src={imageUrl(images[activeIdx]?.image_url)}
               alt={name}
@@ -87,7 +87,7 @@ export function ProductDetail({ product }) {
         <div className="flex flex-col gap-4">
           <div>
             <h1 className="font-display text-3xl font-bold text-gray-800">{name}</h1>
-            <p className="text-2xl font-semibold text-lupe-600 mt-2">{formatPrice(product.price)}</p>
+            <p className="text-2xl font-semibold text-lupe-blue mt-2">{formatPrice(product.price)}</p>
           </div>
 
           {description && (
@@ -107,7 +107,7 @@ export function ProductDetail({ product }) {
           )}
 
           <Button
-            variant={cartItem ? 'secondary' : 'primary'}
+            variant="primary"
             size="lg"
             onClick={() => dispatch({ type: 'ADD_ITEM', payload: { product } })}
             className="mt-auto"
