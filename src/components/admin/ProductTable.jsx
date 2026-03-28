@@ -44,7 +44,7 @@ export function ProductTable({ products = [] }) {
                 <td className="px-4 py-3 font-medium text-gray-800">
                   {localizedField(product, 'name', i18n.language)}
                 </td>
-                <td className="px-4 py-3 text-lupe-600 font-semibold">
+                <td className="px-4 py-3 text-lupe-blue font-semibold">
                   {formatPrice(product.price)}
                 </td>
                 <td className="px-4 py-3 text-gray-600">

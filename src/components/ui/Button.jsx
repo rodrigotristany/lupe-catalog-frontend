@@ -1,9 +1,9 @@
 const variants = {
   primary: 'bg-lupe-light-pink text-lupe-blue font-bold hover:scale-105 active:scale-95 transition-transform duration-150',
-  secondary: 'bg-lupe-100 hover:bg-lupe-200 text-lupe-800',
+  secondary: 'bg-lupe-light-blue hover:bg-[#b0c8e8] text-lupe-blue',
   danger: 'bg-red-600 hover:bg-red-700 text-white',
-  ghost: 'hover:bg-lupe-100 text-lupe-700',
-  outline: 'border border-lupe-300 hover:bg-lupe-50 text-lupe-700',
+  ghost: 'hover:bg-lupe-light-blue text-lupe-blue',
+  outline: 'border border-lupe-blue hover:bg-lupe-light-blue text-lupe-blue',
 };
 
 const sizes = {

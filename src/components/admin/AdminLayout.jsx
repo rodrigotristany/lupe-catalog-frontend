@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { LayoutDashboard, Package, Tag, Settings, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
+import lupeLogo from '../../assets/lupe_pink.svg';
 
 const navItems = [
   { to: '/admin', icon: LayoutDashboard, labelKey: 'admin.dashboard', end: true },
@@ -17,10 +18,10 @@ export function AdminLayout() {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <aside className="w-56 bg-lupe-900 text-lupe-100 flex flex-col flex-shrink-0">
-        <div className="p-5 border-b border-lupe-800">
-          <p className="font-display text-xl font-bold text-white">LUPE</p>
-          <p className="text-xs text-lupe-400 mt-0.5">{username}</p>
+      <aside className="w-56 bg-lupe-blue text-white flex flex-col flex-shrink-0">
+        <div className="p-5 border-b border-white/10">
+          <img src={lupeLogo} alt="LUPE" className="h-8 w-auto mb-1" />
+          <p className="text-xs text-lupe-light-blue mt-0.5">{username}</p>
         </div>
 
         <nav className="flex-1 p-3 space-y-1">
@@ -32,8 +33,8 @@ export function AdminLayout() {
               className={({ isActive }) =>
                 `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-lupe-700 text-white'
-                    : 'text-lupe-300 hover:bg-lupe-800 hover:text-white'
+                    ? 'bg-white/20 text-white'
+                    : 'text-lupe-light-blue hover:bg-white/10 hover:text-white'
                 }`
               }
             >
@@ -43,10 +44,10 @@ export function AdminLayout() {
           ))}
         </nav>
 
-        <div className="p-3 border-t border-lupe-800">
+        <div className="p-3 border-t border-white/10">
           <button
             onClick={logout}
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-lupe-400 hover:bg-lupe-800 hover:text-white w-full transition-colors"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-lupe-light-blue hover:bg-white/10 hover:text-white w-full transition-colors"
           >
             <LogOut size={16} />
             {t('admin.logout')}
