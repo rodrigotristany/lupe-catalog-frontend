@@ -52,7 +52,7 @@ export function CartDrawer({ isOpen, onClose }) {
             <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
               <ShoppingBag size={48} className="text-lupe-light-blue" />
               <p className="text-gray-500">{t('cart.empty')}</p>
-              <Button variant="secondary" onClick={onClose} as={Link} to="/">
+              <Button variant="primary" onClick={onClose} as={Link} to="/">
                 {t('cart.empty_cta')}
               </Button>
             </div>
