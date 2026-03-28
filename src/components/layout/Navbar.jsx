@@ -26,12 +26,12 @@ export function Navbar() {
     <>
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-lupe-blue shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/">
-              <img src={lupeLogo} alt="LUPE" className="h-10 w-auto" />
+          <div className="relative flex items-center h-16 lg:h-20">
+            <Link to="/" className="absolute left-1/2 -translate-x-1/2 sm:relative sm:left-auto sm:translate-x-0">
+              <img src={lupeLogo} alt="LUPE" className="h-10 lg:h-14 w-auto" />
             </Link>
 
-            <nav className="flex items-center gap-2">
+            <nav className="flex items-center gap-2 ml-auto">
               <button
                 onClick={toggleLanguage}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600"
