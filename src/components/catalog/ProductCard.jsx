@@ -29,7 +29,7 @@ export function ProductCard({ product }) {
           src={imageUrl(product.primary_image)}
           alt={name}
           loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 [image-orientation:from-image]"
         />
       </div>
 

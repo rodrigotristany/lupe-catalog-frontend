@@ -42,7 +42,7 @@ export function ProductDetail({ product }) {
             <img
               src={imageUrl(images[activeIdx]?.image_url)}
               alt={name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover [image-orientation:from-image]"
             />
             {images.length > 1 && (
               <>
@@ -75,7 +75,7 @@ export function ProductDetail({ product }) {
                   <img
                     src={imageUrl(img.image_url)}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover [image-orientation:from-image]"
                   />
                 </button>
               ))}

@@ -15,7 +15,7 @@ export function CartItem({ item }) {
         <img
           src={imageUrl(item.primaryImage)}
           alt={name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover [image-orientation:from-image]"
         />
       </div>
 
