@@ -24,7 +24,7 @@ export function AdminProductEditPage() {
         <meta name="robots" content="noindex" />
       </Helmet>
 
-      <h1 className="font-display text-2xl font-bold text-gray-800 mb-6">{title}</h1>
+      <h1 className="font-colab text-2xl font-bold text-gray-800 mb-6">{title}</h1>
 
       <div className="space-y-10">
         <ProductForm product={isNew ? null : product} />

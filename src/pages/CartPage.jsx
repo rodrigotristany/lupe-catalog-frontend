@@ -21,7 +21,7 @@ export function CartPage() {
           <Link to="/" className="text-lupe-600 hover:text-lupe-800">
             <ArrowLeft size={20} />
           </Link>
-          <h1 className="font-display text-2xl font-bold text-lupe-800">{t('cart.title')}</h1>
+          <h1 className="font-colab text-2xl font-bold text-lupe-800">{t('cart.title')}</h1>
         </div>
 
         {state.items.length === 0 ? (

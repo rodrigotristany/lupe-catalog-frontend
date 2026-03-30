@@ -15,7 +15,7 @@ export function AdminSettingsPage() {
         <meta name="robots" content="noindex" />
       </Helmet>
 
-      <h1 className="font-display text-2xl font-bold text-gray-800 mb-6">{t('admin.settings')}</h1>
+      <h1 className="font-colab text-2xl font-bold text-gray-800 mb-6">{t('admin.settings')}</h1>
 
       {isLoading ? <FullPageSpinner /> : <SettingsForm settings={settings} />}
     </>
