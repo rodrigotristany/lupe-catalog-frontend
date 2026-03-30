@@ -21,7 +21,7 @@ export function AdminProductsPage() {
       </Helmet>
 
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold text-gray-800">{t('admin.products')}</h1>
+        <h1 className="font-colab text-2xl font-bold text-gray-800">{t('admin.products')}</h1>
         <Link to="/admin/products/new">
           <Button size="sm">
             <Plus size={16} />

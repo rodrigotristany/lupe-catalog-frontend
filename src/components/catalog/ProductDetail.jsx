@@ -86,7 +86,7 @@ export function ProductDetail({ product }) {
         {/* Product info */}
         <div className="flex flex-col gap-4">
           <div>
-            <h1 className="font-display text-3xl font-bold text-gray-800">{name}</h1>
+            <h1 className="font-colab text-3xl font-bold text-gray-800">{name}</h1>
             <p className="text-2xl font-semibold text-lupe-blue mt-2">{formatPrice(product.price)}</p>
           </div>
 

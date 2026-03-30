@@ -22,7 +22,7 @@ export function AdminCategoriesPage() {
       </Helmet>
 
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold text-gray-800">{t('admin.categories')}</h1>
+        <h1 className="font-colab text-2xl font-bold text-gray-800">{t('admin.categories')}</h1>
         <Button size="sm" onClick={() => setCreating(true)}>
           <Plus size={16} />
           {t('admin.new_category')}
