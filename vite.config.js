@@ -6,7 +6,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://localhost:8000',
-      '/media': 'http://localhost:8000',
+      '/media': {
+        target: 'http://localhost:9000',
+        rewrite: (path) => path.replace(/^\/media/, '/lupe-media'),
+      },
     },
   },
 });
