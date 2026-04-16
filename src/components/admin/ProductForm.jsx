@@ -8,7 +8,7 @@ import { useCategories } from '../../hooks/useCategories';
 import { Input, Textarea, Select } from '../ui/Input';
 import { Button } from '../ui/Button';
 
-export function ProductForm({ product }) {
+export function ProductForm({ product, coverImageId = null }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -22,6 +22,7 @@ export function ProductForm({ product }) {
     price: product?.price || '',
     category_id: product?.category?.id ?? '',
     is_active: product?.is_active ?? true,
+    priority: product?.priority ?? 0,
   });
 
   const isEdit = !!product;
@@ -45,6 +46,8 @@ export function ProductForm({ product }) {
     const payload = {
       ...form,
       category_id: form.category_id !== '' ? parseInt(form.category_id, 10) : null,
+      priority: parseInt(form.priority, 10) || 0,
+      cover_image_id: coverImageId,
     };
     mutation.mutate(payload);
   }
@@ -100,15 +103,30 @@ export function ProductForm({ product }) {
         </Select>
       </div>
 
-      <label className="flex items-center gap-2 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={form.is_active}
-          onChange={(e) => set('is_active', e.target.checked)}
-          className="rounded border-gray-300 text-lupe-500 focus:ring-lupe-400"
-        />
-        <span className="text-sm font-medium text-gray-700">{t('admin.is_active')}</span>
-      </label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {t('admin.priority')}
+          </label>
+          <input
+            type="number"
+            value={form.priority}
+            onChange={(e) => set('priority', e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-blue"
+          />
+          <p className="text-xs text-gray-400 mt-1">{t('admin.priority_hint')}</p>
+        </div>
+
+        <label className="flex items-center gap-2 cursor-pointer pb-2">
+          <input
+            type="checkbox"
+            checked={form.is_active}
+            onChange={(e) => set('is_active', e.target.checked)}
+            className="rounded border-gray-300 text-lupe-500 focus:ring-lupe-400"
+          />
+          <span className="text-sm font-medium text-gray-700">{t('admin.is_active')}</span>
+        </label>
+      </div>
 
       <div className="flex gap-3">
         <Button type="submit" disabled={mutation.isPending}>

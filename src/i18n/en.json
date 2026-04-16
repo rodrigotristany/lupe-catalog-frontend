@@ -77,7 +77,11 @@
     "history_by": "by",
     "no_history": "No history available",
     "sort_by": "Sort by",
-    "search": "Search"
+    "search": "Search",
+    "set_cover": "Set as cover",
+    "cover_label": "Cover",
+    "priority": "Priority",
+    "priority_hint": "Lower number = shown first"
   },
   "common": {
     "save": "Save",

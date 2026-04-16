@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { UploadCloud, X, Trash2 } from 'lucide-react';
+import { UploadCloud, X, Trash2, Star } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -11,7 +11,7 @@ import { Modal } from '../ui/Modal';
 const MAX_IMAGES = 10;
 const ACCEPTED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
-export function ImageUploader({ productId, existingImages = [] }) {
+export function ImageUploader({ productId, existingImages = [], coverImageId = null, onCoverChange }) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const inputRef = useRef(null);
@@ -55,6 +55,7 @@ export function ImageUploader({ productId, existingImages = [] }) {
   const deleteMutation = useMutation({
     mutationFn: deleteImage,
     onSuccess: () => {
+      if (deleteId === coverImageId && onCoverChange) onCoverChange(null);
       queryClient.invalidateQueries({ queryKey: ['product', productId] });
       toast.success(t('admin.deleted'));
       setDeleteId(null);
@@ -67,17 +68,39 @@ export function ImageUploader({ productId, existingImages = [] }) {
       {/* Existing images */}
       {existingImages.length > 0 && (
         <div className="flex flex-wrap gap-3">
-          {existingImages.map((img) => (
-            <div key={img.id} className="relative group w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
-              <img src={imageUrl(img.image_url || img.image_path)} alt="" className="w-full h-full object-cover [image-orientation:from-image]" />
-              <button
-                onClick={() => setDeleteId(img.id)}
-                className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-              >
-                <Trash2 size={18} className="text-white" />
-              </button>
-            </div>
-          ))}
+          {existingImages.map((img) => {
+            const isCover = img.id === coverImageId;
+            return (
+              <div key={img.id} className={`relative group w-24 h-24 rounded-lg overflow-hidden border-2 ${isCover ? 'border-lupe-blue' : 'border-gray-200'}`}>
+                <img src={imageUrl(img.image_url || img.image_path)} alt="" className="w-full h-full object-cover [image-orientation:from-image]" />
+
+                {isCover && (
+                  <span className="absolute top-1 left-1 bg-lupe-blue text-white text-[10px] font-bold px-1.5 py-0.5 rounded leading-none pointer-events-none">
+                    {t('admin.cover_label')}
+                  </span>
+                )}
+
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 transition-opacity">
+                  {!isCover && onCoverChange && (
+                    <button
+                      onClick={() => onCoverChange(img.id)}
+                      className="flex items-center gap-1 text-xs text-white font-medium hover:text-yellow-300 transition-colors"
+                      title={t('admin.set_cover')}
+                    >
+                      <Star size={12} />
+                      <span>{t('admin.set_cover')}</span>
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setDeleteId(img.id)}
+                    className="flex items-center justify-center text-white hover:text-red-400 transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
