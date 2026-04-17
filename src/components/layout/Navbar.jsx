@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useCart } from '../../hooks/useCart';
 import { CartDrawer } from '../cart/CartDrawer';
 import { useSettings } from '../../hooks/useSettings';
-import lupeLogo from '../../assets/lupe_blue.svg';
+import lupeLogo from '../../assets/lupe_pink.svg';
 
 export function Navbar() {
   const { t, i18n } = useTranslation();
@@ -24,17 +24,17 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-lupe-pink shadow-sm">
+      <header className="sticky top-0 z-40 bg-lupe-blue shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative flex items-center h-16 lg:h-20">
+          <div className="relative flex items-center py-3 md:py-4 lg:py-5">
             <Link to="/" className="absolute left-1/2 -translate-x-1/2 sm:relative sm:left-auto sm:translate-x-0">
-              <img src={lupeLogo} alt="LUPE" className="h-10 md:h-[60px] lg:h-20 w-auto" />
+              <img src={lupeLogo} alt="LUPE" className="h-10 md:h-[75px] lg:h-[120px] w-auto" />
             </Link>
 
             <nav className="flex items-center gap-2 ml-auto">
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-lupe-blue"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-lupe-light-pink"
                 aria-label="Toggle language"
               >
                 <Globe size={16} />
@@ -43,7 +43,7 @@ export function Navbar() {
 
               <button
                 onClick={() => setCartOpen(true)}
-                className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-lupe-blue"
+                className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-lupe-light-pink"
                 aria-label={t('nav.cart')}
               >
                 <ShoppingCart size={20} />
