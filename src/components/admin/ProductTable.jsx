@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -10,7 +10,7 @@ import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { useState } from 'react';
 
-export function ProductTable({ products = [] }) {
+export function ProductTable({ products = [], pagination, onPageChange }) {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const [deleteId, setDeleteId] = useState(null);
@@ -80,6 +80,28 @@ export function ProductTable({ products = [] }) {
           <p className="text-center text-gray-400 py-8 text-sm">{t('catalog.no_results')}</p>
         )}
       </div>
+
+      {pagination && pagination.pages > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-4">
+          <button
+            onClick={() => onPageChange(pagination.page - 1)}
+            disabled={pagination.page <= 1}
+            className="p-2 rounded-lg border border-gray-200 text-lupe-700 hover:bg-lupe-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <span className="text-sm text-gray-600">
+            {pagination.page} / {pagination.pages}
+          </span>
+          <button
+            onClick={() => onPageChange(pagination.page + 1)}
+            disabled={pagination.page >= pagination.pages}
+            className="p-2 rounded-lg border border-gray-200 text-lupe-700 hover:bg-lupe-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      )}
 
       <Modal
         isOpen={!!deleteId}

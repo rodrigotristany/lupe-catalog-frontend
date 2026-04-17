@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +13,11 @@ export function AdminProductEditPage() {
   const { id } = useParams();
   const isNew = !id;
   const { data: product, isLoading } = useProduct(id);
+  const [coverImageId, setCoverImageId] = useState(null);
+
+  useEffect(() => {
+    if (product) setCoverImageId(product.cover_image_id ?? null);
+  }, [product?.cover_image_id]);
 
   const title = isNew ? t('admin.new_product') : t('admin.edit_product');
 
@@ -27,7 +33,7 @@ export function AdminProductEditPage() {
       <h1 className="font-colab text-2xl font-bold text-gray-800 mb-6">{title}</h1>
 
       <div className="space-y-10">
-        <ProductForm product={isNew ? null : product} />
+        <ProductForm product={isNew ? null : product} coverImageId={coverImageId} />
 
         {!isNew && product && (
           <>
@@ -36,6 +42,8 @@ export function AdminProductEditPage() {
               <ImageUploader
                 productId={id}
                 existingImages={product.images || []}
+                coverImageId={coverImageId}
+                onCoverChange={setCoverImageId}
               />
             </section>
 

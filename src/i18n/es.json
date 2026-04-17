@@ -77,7 +77,11 @@
     "history_by": "por",
     "no_history": "Sin historial disponible",
     "sort_by": "Ordenar por",
-    "search": "Buscar"
+    "search": "Buscar",
+    "set_cover": "Portada",
+    "cover_label": "Portada",
+    "priority": "Prioridad",
+    "priority_hint": "Menor número = aparece primero"
   },
   "common": {
     "save": "Guardar",
