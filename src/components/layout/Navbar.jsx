@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Globe } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../../hooks/useCart';
 import { CartDrawer } from '../cart/CartDrawer';
@@ -8,17 +8,12 @@ import { useSettings } from '../../hooks/useSettings';
 import lupeLogo from '../../assets/lupe_pink.svg';
 
 export function Navbar() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { state } = useCart();
   const { data: settings } = useSettings();
   const [cartOpen, setCartOpen] = useState(false);
 
   const totalItems = state.items.reduce((sum, i) => sum + i.quantity, 0);
-
-  function toggleLanguage() {
-    const next = i18n.language === 'es' ? 'en' : 'es';
-    i18n.changeLanguage(next);
-  }
 
   const storeName = settings?.store_name || 'LUPE';
 
@@ -32,15 +27,6 @@ export function Navbar() {
             </Link>
 
             <nav className="flex items-center gap-2 ml-auto">
-              <button
-                onClick={toggleLanguage}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-lupe-light-pink"
-                aria-label="Toggle language"
-              >
-                <Globe size={16} />
-                <span className="hidden sm:inline">{i18n.language === 'es' ? 'EN' : 'ES'}</span>
-              </button>
-
               <button
                 onClick={() => setCartOpen(true)}
                 className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-lupe-light-pink"
