@@ -7,8 +7,8 @@ import { useCart } from '../../hooks/useCart';
 export function CartItem({ item }) {
   const { t, i18n } = useTranslation();
   const { dispatch } = useCart();
-  const name = (i18n.language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
-
+  //const name = (i18n.language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
+  const name = item.nameEs;
   return (
     <div className="flex gap-3 py-3 border-b border-gray-200 last:border-0">
       <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-lupe-light-blue">

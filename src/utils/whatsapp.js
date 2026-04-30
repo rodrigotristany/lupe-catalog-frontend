@@ -7,7 +7,8 @@ export function buildWhatsAppUrl(cartItems, settings, language) {
   const footer = '¡Gracias!';
 
   const lines = cartItems.map((item) => {
-    const name = (language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
+    //const name = (language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
+    const name = item.nameEs;
     const lineTotal = formatPrice(parseFloat(item.price) * item.quantity);
     return `${item.quantity}x  ${name.padEnd(20)} ${lineTotal}`;
   });
