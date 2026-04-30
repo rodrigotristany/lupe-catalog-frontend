@@ -29,9 +29,11 @@ export function CatalogPage() {
   const pagination = data ? { page: data.page, pages: data.pages, total: data.total } : null;
   const { data: categories = [] } = useCategories();
 
-  const title = i18n.language === 'es'
-    ? 'LUPE — Objetos para llevar de belleza lo cotidiano'
-    : 'LUPE — Objects to fill the everyday with beauty';
+  // const title = i18n.language === 'es'
+  //   ? 'LUPE — Objetos para llevar de belleza lo cotidiano'
+  //   : 'LUPE — Objects to fill the everyday with beauty';
+
+  const title = 'LUPE — Objetos para llevar de belleza lo cotidiano';
 
   return (
     <>
