@@ -2,11 +2,13 @@ import { formatPrice } from './formatPrice';
 
 export function buildWhatsAppUrl(cartItems, settings, language) {
   const isEs = language === 'es';
-  const header = isEs ? '🛒 *Nuevo Pedido — LUPE*' : '🛒 *New Order — LUPE*';
-  const footer = isEs ? '¡Gracias!' : 'Thank you!';
+  //const header = isEs ? '🛒 *Nuevo Pedido — LUPE*' : '🛒 *New Order — LUPE*';
+  const header = '🛒 *Nuevo Pedido — LUPE*'
+  const footer = '¡Gracias!';
 
   const lines = cartItems.map((item) => {
-    const name = (language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
+    //const name = (language === 'en' ? item.nameEn : item.nameEs) || item.nameEs || item.nameEn || '';
+    const name = item.nameEs;
     const lineTotal = formatPrice(parseFloat(item.price) * item.quantity);
     return `${item.quantity}x  ${name.padEnd(20)} ${lineTotal}`;
   });
