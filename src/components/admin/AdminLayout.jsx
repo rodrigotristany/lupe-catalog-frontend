@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Package, Tag, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, Tag, ShoppingBag, Settings, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
 import lupeLogo from '../../assets/lupe_pink.svg';
@@ -8,6 +8,7 @@ const navItems = [
   { to: '/admin', icon: LayoutDashboard, labelKey: 'admin.dashboard', end: true },
   { to: '/admin/products', icon: Package, labelKey: 'admin.products' },
   { to: '/admin/categories', icon: Tag, labelKey: 'admin.categories' },
+  { to: '/admin/sales', icon: ShoppingBag, labelKey: 'admin.sales' },
   { to: '/admin/settings', icon: Settings, labelKey: 'admin.settings' },
 ];
 

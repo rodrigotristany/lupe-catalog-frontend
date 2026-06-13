@@ -14,6 +14,8 @@ import { AdminProductsPage } from './pages/AdminProductsPage';
 import { AdminProductEditPage } from './pages/AdminProductEditPage';
 import { AdminCategoriesPage } from './pages/AdminCategoriesPage';
 import { AdminSettingsPage } from './pages/AdminSettingsPage';
+import { AdminSalesPage } from './pages/AdminSalesPage';
+import { AdminSaleNewPage } from './pages/AdminSaleNewPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { useAuth } from './hooks/useAuth';
 
@@ -52,6 +54,8 @@ function AppRoutes() {
         <Route path="products/new" element={<AdminProductEditPage />} />
         <Route path="products/:id/edit" element={<AdminProductEditPage />} />
         <Route path="categories" element={<AdminCategoriesPage />} />
+        <Route path="sales" element={<AdminSalesPage />} />
+        <Route path="sales/new" element={<AdminSaleNewPage />} />
         <Route path="settings" element={<AdminSettingsPage />} />
       </Route>
 
