@@ -29,8 +29,8 @@ export function SalesTable({ sales = [], pagination, onPageChange }) {
             <tr>
               <th className="w-8 px-2 py-3" />
               <th className="text-left px-4 py-3 font-medium text-gray-600">Fecha</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">{t('admin.payment_method')}</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">{t('admin.products')}</th>
+              <th className="hidden sm:table-cell text-left px-4 py-3 font-medium text-gray-600">{t('admin.payment_method')}</th>
+              <th className="hidden sm:table-cell text-left px-4 py-3 font-medium text-gray-600">{t('admin.products')}</th>
               <th className="text-right px-4 py-3 font-medium text-gray-600">{t('admin.sale_total')}</th>
             </tr>
           </thead>
@@ -83,29 +83,30 @@ function TableRow({ sale, expanded, onToggle, t }) {
 
   return (
     <>
-      <tr
-        onClick={onToggle}
-        className="hover:bg-gray-50 cursor-pointer transition-colors"
-      >
+      <tr onClick={onToggle} className="hover:bg-gray-50 cursor-pointer transition-colors">
         <td className="px-2 py-3 text-gray-400">
-          {expanded
-            ? <ChevronDown size={16} />
-            : <ChevronRight size={16} />}
+          {expanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
         </td>
-        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{formatDate(sale.created_at)}</td>
-        <td className="px-4 py-3 font-medium text-gray-800">{sale.payment_method}</td>
-        <td className="px-4 py-3 text-gray-500">{itemLabel}</td>
-        <td className="px-4 py-3 text-right text-lupe-blue font-semibold">{formatPrice(sale.total)}</td>
+        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
+          <div>{formatDate(sale.created_at)}</div>
+          {/* Payment method visible below date on mobile */}
+          <div className="sm:hidden text-xs text-gray-400 mt-0.5">{sale.payment_method}</div>
+        </td>
+        <td className="hidden sm:table-cell px-4 py-3 font-medium text-gray-800">{sale.payment_method}</td>
+        <td className="hidden sm:table-cell px-4 py-3 text-gray-500">{itemLabel}</td>
+        <td className="px-4 py-3 text-right text-lupe-blue font-semibold whitespace-nowrap">
+          {formatPrice(sale.total)}
+        </td>
       </tr>
       {expanded && (
         <tr>
-          <td colSpan={5} className="bg-gray-50 px-8 pb-4">
+          <td colSpan={5} className="bg-gray-50 px-4 sm:px-8 pb-4">
             <table className="w-full text-xs mt-2">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-2 font-medium text-gray-500">Producto</th>
-                  <th className="text-left py-2 font-medium text-gray-500">Categoría</th>
-                  <th className="text-right py-2 font-medium text-gray-500">{t('admin.unit_price')}</th>
+                  <th className="hidden sm:table-cell text-left py-2 font-medium text-gray-500">Categoría</th>
+                  <th className="hidden sm:table-cell text-right py-2 font-medium text-gray-500">{t('admin.unit_price')}</th>
                   <th className="text-right py-2 font-medium text-gray-500">{t('admin.quantity')}</th>
                   <th className="text-right py-2 font-medium text-gray-500">{t('admin.subtotal')}</th>
                 </tr>
@@ -114,8 +115,8 @@ function TableRow({ sale, expanded, onToggle, t }) {
                 {sale.items.map(item => (
                   <tr key={item.id}>
                     <td className="py-2 text-gray-700">{item.product_name_es}</td>
-                    <td className="py-2 text-gray-500">{item.category_name_es ?? '—'}</td>
-                    <td className="py-2 text-right text-gray-600">{formatPrice(item.price)}</td>
+                    <td className="hidden sm:table-cell py-2 text-gray-500">{item.category_name_es ?? '—'}</td>
+                    <td className="hidden sm:table-cell py-2 text-right text-gray-600">{formatPrice(item.price)}</td>
                     <td className="py-2 text-right text-gray-600">{item.quantity}</td>
                     <td className="py-2 text-right font-medium text-gray-800">{formatPrice(item.subtotal)}</td>
                   </tr>

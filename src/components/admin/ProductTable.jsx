@@ -32,9 +32,9 @@ export function ProductTable({ products = [], pagination, onPageChange }) {
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="text-left px-4 py-3 font-medium text-gray-600">{t('admin.name_es')}</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">{t('admin.price')}</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">{t('admin.category')}</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">{t('admin.is_active')}</th>
+              <th className="hidden sm:table-cell text-left px-4 py-3 font-medium text-gray-600">{t('admin.price')}</th>
+              <th className="hidden md:table-cell text-left px-4 py-3 font-medium text-gray-600">{t('admin.category')}</th>
+              <th className="hidden md:table-cell text-left px-4 py-3 font-medium text-gray-600">{t('admin.is_active')}</th>
               <th className="text-left px-4 py-3 font-medium text-gray-600">{t('admin.actions')}</th>
             </tr>
           </thead>
@@ -42,15 +42,19 @@ export function ProductTable({ products = [], pagination, onPageChange }) {
             {products.map((product) => (
               <tr key={product.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 font-medium text-gray-800">
-                  {localizedField(product, 'name', i18n.language)}
+                  <div>{localizedField(product, 'name', i18n.language)}</div>
+                  {/* Price visible on mobile below the name */}
+                  <div className="sm:hidden text-xs text-lupe-blue font-semibold mt-0.5">
+                    {formatPrice(product.price)}
+                  </div>
                 </td>
-                <td className="px-4 py-3 text-lupe-blue font-semibold">
+                <td className="hidden sm:table-cell px-4 py-3 text-lupe-blue font-semibold">
                   {formatPrice(product.price)}
                 </td>
-                <td className="px-4 py-3 text-gray-600">
+                <td className="hidden md:table-cell px-4 py-3 text-gray-600">
                   {product.category ? localizedField(product.category, 'name', i18n.language) : '—'}
                 </td>
-                <td className="px-4 py-3">
+                <td className="hidden md:table-cell px-4 py-3">
                   <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${product.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                     {product.is_active ? t('common.yes') : t('common.no')}
                   </span>

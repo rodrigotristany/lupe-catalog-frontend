@@ -12,6 +12,7 @@ import { Select } from '../components/ui/Input';
 import { formatPrice } from '../utils/formatPrice';
 
 const spinnerless = '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
+const numInput = `rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400 ${spinnerless}`;
 
 export function AdminSaleNewPage() {
   const { t } = useTranslation();
@@ -65,34 +66,21 @@ export function AdminSaleNewPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!paymentMethod) {
-      toast.error(t('admin.select_payment_method'));
-      return;
-    }
-    if (items.some(i => !i.product)) {
-      toast.error('Completá todos los productos antes de guardar');
-      return;
-    }
+    if (!paymentMethod) { toast.error(t('admin.select_payment_method')); return; }
+    if (items.some(i => !i.product)) { toast.error('Completá todos los productos antes de guardar'); return; }
     mutation.mutate(
       {
         payment_method: paymentMethod,
         items: items.map(i => ({ product_id: i.product.id, quantity: i.quantity })),
       },
       {
-        onSuccess: () => {
-          toast.success(t('admin.created'));
-          navigate('/admin/sales');
-        },
+        onSuccess: () => { toast.success(t('admin.created')); navigate('/admin/sales'); },
         onError: (error) => {
           const status = error?.response?.status;
           const detail = (error?.response?.data?.detail ?? '').toLowerCase();
-          if (status === 400 && detail.includes('payment')) {
-            toast.error(t('admin.sale_invalid_payment_method'));
-          } else if (status === 404) {
-            toast.error(t('admin.sale_product_not_found'));
-          } else {
-            toast.error(t('common.error'));
-          }
+          if (status === 400 && detail.includes('payment')) toast.error(t('admin.sale_invalid_payment_method'));
+          else if (status === 404) toast.error(t('admin.sale_product_not_found'));
+          else toast.error(t('common.error'));
         },
       }
     );
@@ -106,10 +94,7 @@ export function AdminSaleNewPage() {
       </Helmet>
 
       <div className="flex items-center gap-3 mb-6">
-        <Link
-          to="/admin/sales"
-          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
-        >
+        <Link to="/admin/sales" className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors">
           <ArrowLeft size={18} />
         </Link>
         <h1 className="font-colab text-2xl font-bold text-gray-800">{t('admin.new_sale')}</h1>
@@ -122,16 +107,85 @@ export function AdminSaleNewPage() {
           onChange={(e) => setPaymentMethod(e.target.value)}
         >
           <option value="">{t('admin.select_payment_method')}</option>
-          {paymentMethods.map(m => (
-            <option key={m} value={m}>{m}</option>
-          ))}
+          {paymentMethods.map(m => <option key={m} value={m}>{m}</option>)}
         </Select>
 
+        {/* ── Items section ─────────────────────────────────── */}
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-3">
-            {t('admin.products')}
-          </label>
-          <div className="rounded-xl border border-gray-200 overflow-x-auto">
+          <label className="text-sm font-medium text-gray-700 block mb-3">{t('admin.products')}</label>
+
+          {/* Mobile card view (< sm) */}
+          <div className="sm:hidden space-y-3">
+            {items.map(item => {
+              const price = parseFloat(item.price);
+              const subtotal = item.product && !isNaN(price) ? price * item.quantity : null;
+              const excludeIds = selectedProductIds.filter(id => id !== item.product?.id);
+              return (
+                <div key={item.key} className="border border-gray-200 rounded-xl p-4 space-y-3 bg-white">
+                  <div className="flex gap-2">
+                    <div className="flex-1 min-w-0">
+                      <ProductSearchInput
+                        value={item.product}
+                        onSelect={(product) => setItemProduct(item.key, product)}
+                        excludeIds={excludeIds}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeItem(item.key)}
+                      disabled={items.length === 1}
+                      className="flex-shrink-0 p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">{t('admin.unit_price')}</label>
+                      <input
+                        type="number" min="0" step="0.01"
+                        value={item.price}
+                        onChange={(e) => setItemPrice(item.key, e.target.value)}
+                        disabled={!item.product}
+                        placeholder="0.00"
+                        className={`w-full text-right ${numInput}`}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">{t('admin.quantity')}</label>
+                      <div className="flex items-center gap-1">
+                        <button type="button" onClick={() => adjustQuantity(item.key, -1)}
+                          className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 text-base leading-none transition-colors flex-shrink-0">
+                          −
+                        </button>
+                        <input
+                          type="number" min="1"
+                          value={item.quantity}
+                          onChange={(e) => setItemQuantity(item.key, e.target.value)}
+                          className={`w-12 text-center ${numInput}`}
+                        />
+                        <button type="button" onClick={() => adjustQuantity(item.key, 1)}
+                          className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 text-base leading-none transition-colors flex-shrink-0">
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {subtotal !== null && (
+                    <div className="text-right text-sm border-t border-gray-100 pt-2">
+                      <span className="text-gray-500">{t('admin.subtotal')}: </span>
+                      <span className="font-semibold text-gray-800">{formatPrice(subtotal)}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop table view (≥ sm) */}
+          <div className="hidden sm:block rounded-xl border border-gray-200 overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
@@ -149,7 +203,6 @@ export function AdminSaleNewPage() {
                   const excludeIds = selectedProductIds.filter(id => id !== item.product?.id);
                   return (
                     <tr key={item.key}>
-                      {/* Product selector */}
                       <td className="px-4 py-3">
                         <ProductSearchInput
                           value={item.product}
@@ -157,54 +210,37 @@ export function AdminSaleNewPage() {
                           excludeIds={excludeIds}
                         />
                       </td>
-
-                      {/* Editable unit price */}
                       <td className="px-4 py-3">
                         <input
-                          type="number"
-                          min="0"
-                          step="0.01"
+                          type="number" min="0" step="0.01"
                           value={item.price}
                           onChange={(e) => setItemPrice(item.key, e.target.value)}
                           disabled={!item.product}
                           placeholder="0.00"
-                          className={`w-full text-right rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400 ${spinnerless}`}
+                          className={`w-full text-right ${numInput}`}
                         />
                       </td>
-
-                      {/* Quantity with +/- controls */}
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => adjustQuantity(item.key, -1)}
-                            className="hidden sm:flex w-7 h-7 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 hover:border-gray-400 text-base leading-none transition-colors flex-shrink-0"
-                          >
+                          <button type="button" onClick={() => adjustQuantity(item.key, -1)}
+                            className="hidden sm:flex w-7 h-7 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 text-base leading-none transition-colors flex-shrink-0">
                             −
                           </button>
                           <input
-                            type="number"
-                            min="1"
+                            type="number" min="1"
                             value={item.quantity}
                             onChange={(e) => setItemQuantity(item.key, e.target.value)}
-                            className={`w-12 text-center rounded-lg border border-gray-300 px-1 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent ${spinnerless}`}
+                            className={`w-12 text-center ${numInput}`}
                           />
-                          <button
-                            type="button"
-                            onClick={() => adjustQuantity(item.key, 1)}
-                            className="hidden sm:flex w-7 h-7 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 hover:border-gray-400 text-base leading-none transition-colors flex-shrink-0"
-                          >
+                          <button type="button" onClick={() => adjustQuantity(item.key, 1)}
+                            className="hidden sm:flex w-7 h-7 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 text-base leading-none transition-colors flex-shrink-0">
                             +
                           </button>
                         </div>
                       </td>
-
-                      {/* Computed subtotal */}
                       <td className="px-4 py-3 text-right font-medium text-gray-800 whitespace-nowrap">
                         {subtotal !== null ? formatPrice(subtotal) : '—'}
                       </td>
-
-                      {/* Remove button */}
                       <td className="px-2 py-3 text-center">
                         <button
                           type="button"
@@ -241,9 +277,7 @@ export function AdminSaleNewPage() {
 
         <div className="flex items-center justify-between">
           <Link to="/admin/sales">
-            <Button type="button" variant="outline">
-              {t('common.cancel')}
-            </Button>
+            <Button type="button" variant="outline">{t('common.cancel')}</Button>
           </Link>
           <Button type="submit" disabled={mutation.isPending}>
             {mutation.isPending ? t('common.loading') : t('admin.register_sale')}

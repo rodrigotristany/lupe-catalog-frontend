@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Plus, ShoppingBag } from 'lucide-react';
+import { Plus, ShoppingBag, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSales } from '../hooks/useSales';
 import { useCategories } from '../hooks/useCategories';
@@ -14,6 +14,7 @@ import { FullPageSpinner } from '../components/ui/Spinner';
 
 export function AdminSalesPage() {
   const { t } = useTranslation();
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [dateFrom, setDateFrom] = useState('');
@@ -40,7 +41,10 @@ export function AdminSalesPage() {
   const sales = data?.items ?? [];
   const pagination = data ? { page: data.page, pages: data.pages, total: data.total } : null;
   const paymentMethods = settings?.payment_methods ?? [];
-  const hasActiveFilters = !!(paymentMethod || categoryId || dateFrom || dateTo || totalMin || totalMax);
+
+  const activeFilterCount = [paymentMethod, categoryId, dateFrom, dateTo, totalMin, totalMax]
+    .filter(Boolean).length;
+  const hasActiveFilters = activeFilterCount > 0;
 
   function clearFilters() {
     setPaymentMethod('');
@@ -58,6 +62,53 @@ export function AdminSalesPage() {
 
   const inputClass = 'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent';
 
+  const filterGrid = (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-3 sm:mt-0">
+      <Select label={t('admin.payment_method')} value={paymentMethod} onChange={handleFilter(setPaymentMethod)}>
+        <option value="">Todos</option>
+        {paymentMethods.map(m => <option key={m} value={m}>{m}</option>)}
+      </Select>
+
+      <Select label={t('admin.category')} value={categoryId} onChange={handleFilter(setCategoryId)}>
+        <option value="">{t('catalog.all_categories')}</option>
+        {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name_es}</option>)}
+      </Select>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium text-gray-700">{t('admin.date_from')}</label>
+        <input type="date" value={dateFrom} onChange={handleFilter(setDateFrom)} className={inputClass} />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium text-gray-700">{t('admin.date_to')}</label>
+        <input type="date" value={dateTo} onChange={handleFilter(setDateTo)} className={inputClass} />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium text-gray-700">{t('admin.total_min')}</label>
+        <input type="number" min="0" step="0.01" value={totalMin} onChange={handleFilter(setTotalMin)} placeholder="0.00" className={inputClass} />
+      </div>
+
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium text-gray-700">{t('admin.total_max')}</label>
+        <input type="number" min="0" step="0.01" value={totalMax} onChange={handleFilter(setTotalMax)} placeholder="0.00" className={inputClass} />
+      </div>
+
+      <Select label={t('admin.sort_by')} value={order} onChange={(e) => { setOrder(e.target.value); setPage(1); }}>
+        <option value="desc">{t('admin.order_desc')}</option>
+        <option value="asc">{t('admin.order_asc')}</option>
+      </Select>
+
+      <div className="flex items-end pb-0.5">
+        {hasActiveFilters && (
+          <button onClick={clearFilters} className="text-sm text-lupe-blue hover:underline">
+            {t('admin.clear_filters')}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Helmet>
@@ -70,91 +121,33 @@ export function AdminSalesPage() {
         <Link to="/admin/sales/new">
           <Button size="sm">
             <Plus size={16} />
-            {t('admin.new_sale')}
+            <span className="hidden sm:inline">{t('admin.new_sale')}</span>
+            <span className="sm:hidden">Nueva</span>
           </Button>
         </Link>
       </div>
 
-      {/* Filters */}
+      {/* Filter panel */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Select
-            label={t('admin.payment_method')}
-            value={paymentMethod}
-            onChange={handleFilter(setPaymentMethod)}
-          >
-            <option value="">Todos</option>
-            {paymentMethods.map(m => (
-              <option key={m} value={m}>{m}</option>
-            ))}
-          </Select>
-
-          <Select
-            label={t('admin.category')}
-            value={categoryId}
-            onChange={handleFilter(setCategoryId)}
-          >
-            <option value="">{t('catalog.all_categories')}</option>
-            {categories.map(cat => (
-              <option key={cat.id} value={cat.id}>{cat.name_es}</option>
-            ))}
-          </Select>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">{t('admin.date_from')}</label>
-            <input type="date" value={dateFrom} onChange={handleFilter(setDateFrom)} className={inputClass} />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">{t('admin.date_to')}</label>
-            <input type="date" value={dateTo} onChange={handleFilter(setDateTo)} className={inputClass} />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">{t('admin.total_min')}</label>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={totalMin}
-              onChange={handleFilter(setTotalMin)}
-              placeholder="0.00"
-              className={inputClass}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">{t('admin.total_max')}</label>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={totalMax}
-              onChange={handleFilter(setTotalMax)}
-              placeholder="0.00"
-              className={inputClass}
-            />
-          </div>
-
-          <Select
-            label={t('admin.sort_by')}
-            value={order}
-            onChange={(e) => { setOrder(e.target.value); setPage(1); }}
-          >
-            <option value="desc">{t('admin.order_desc')}</option>
-            <option value="asc">{t('admin.order_asc')}</option>
-          </Select>
-
-          <div className="flex items-end pb-0.5">
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="text-sm text-lupe-blue hover:underline"
-              >
-                {t('admin.clear_filters')}
-              </button>
+        {/* Mobile toggle */}
+        <button
+          className="sm:hidden w-full flex items-center justify-between text-sm font-medium text-gray-700"
+          onClick={() => setFiltersOpen(o => !o)}
+        >
+          <span>
+            Filtros
+            {activeFilterCount > 0 && (
+              <span className="ml-2 px-1.5 py-0.5 bg-lupe-blue text-white rounded-full text-xs">
+                {activeFilterCount}
+              </span>
             )}
-          </div>
+          </span>
+          <ChevronDown size={16} className={`transition-transform duration-200 ${filtersOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        {/* Filters: always visible on sm+, toggled on mobile */}
+        <div className={`${filtersOpen ? 'block' : 'hidden'} sm:block`}>
+          {filterGrid}
         </div>
       </div>
 
