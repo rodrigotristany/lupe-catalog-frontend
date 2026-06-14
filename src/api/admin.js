@@ -67,3 +67,14 @@ export async function updateSettings(payload) {
   const { data } = await client.put('/admin/settings', payload);
   return data;
 }
+
+// Sales
+export async function getSales(filters = {}) {
+  const { data } = await client.get('/admin/sales', { params: filters });
+  return data;
+}
+
+export async function createSale(payload) {
+  const { data } = await client.post('/admin/sales', payload);
+  return data;
+}
