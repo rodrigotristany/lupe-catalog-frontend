@@ -25,13 +25,10 @@ export function ProductSearchInput({ value, onSelect, excludeIds = [] }) {
     setOpen(true);
   }
 
-  // Auto-focus search input when opened
   useEffect(() => {
     if (open) {
       setQuery('');
       setHighlighted(0);
-      const timer = setTimeout(() => searchRef.current?.focus(), 0);
-      return () => clearTimeout(timer);
     }
   }, [open]);
 
@@ -45,10 +42,15 @@ export function ProductSearchInput({ value, onSelect, excludeIds = [] }) {
     return () => document.removeEventListener('mousedown', handleOutside);
   }, [open]);
 
-  // Close on scroll so the fixed dropdown doesn't drift away from the trigger
+  // Close on scroll so the fixed dropdown doesn't drift away from the trigger,
+  // but ignore scrolls that happen inside the dropdown itself.
+  const dropdownRef = useRef(null);
   useEffect(() => {
     if (!open) return;
-    function handleScroll() { setOpen(false); }
+    function handleScroll(e) {
+      if (dropdownRef.current?.contains(e.target)) return;
+      setOpen(false);
+    }
     window.addEventListener('scroll', handleScroll, true);
     return () => window.removeEventListener('scroll', handleScroll, true);
   }, [open]);
@@ -104,6 +106,7 @@ export function ProductSearchInput({ value, onSelect, excludeIds = [] }) {
       {/* Fixed dropdown — overlays everything, unaffected by ancestor overflow */}
       {open && (
         <div
+          ref={dropdownRef}
           className="fixed z-50 bg-white rounded-lg border border-gray-200 shadow-lg"
           style={{ top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width }}
         >

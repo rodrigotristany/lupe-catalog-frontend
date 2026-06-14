@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { Plus, X } from 'lucide-react';
@@ -9,6 +9,7 @@ import { Button } from '../ui/Button';
 
 export function SettingsForm({ settings }) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [form, setForm] = useState({
     store_name: '',
     whatsapp_number: '',
@@ -32,7 +33,10 @@ export function SettingsForm({ settings }) {
 
   const mutation = useMutation({
     mutationFn: updateSettings,
-    onSuccess: () => toast.success(t('admin.saved')),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings'] });
+      toast.success(t('admin.saved'));
+    },
     onError: () => toast.error(t('common.error')),
   });
 
