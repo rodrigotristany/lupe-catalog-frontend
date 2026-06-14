@@ -11,12 +11,14 @@ import { Button } from '../components/ui/Button';
 import { Select } from '../components/ui/Input';
 import { formatPrice } from '../utils/formatPrice';
 
+const spinnerless = '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
+
 export function AdminSaleNewPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const nextKey = useRef(1);
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [items, setItems] = useState([{ key: 0, product: null, quantity: 1 }]);
+  const [items, setItems] = useState([{ key: 0, product: null, quantity: 1, price: '' }]);
 
   const { data: settings } = useSettings();
   const paymentMethods = settings?.payment_methods ?? [];
@@ -25,12 +27,13 @@ export function AdminSaleNewPage() {
   const selectedProductIds = items.filter(i => i.product).map(i => i.product.id);
 
   const total = items.reduce((sum, item) => {
-    if (!item.product) return sum;
-    return sum + parseFloat(item.product.price) * item.quantity;
+    const price = parseFloat(item.price);
+    if (!item.product || isNaN(price)) return sum;
+    return sum + price * item.quantity;
   }, 0);
 
   function addItem() {
-    setItems(prev => [...prev, { key: nextKey.current++, product: null, quantity: 1 }]);
+    setItems(prev => [...prev, { key: nextKey.current++, product: null, quantity: 1, price: '' }]);
   }
 
   function removeItem(key) {
@@ -38,13 +41,26 @@ export function AdminSaleNewPage() {
   }
 
   function setItemProduct(key, product) {
-    setItems(prev => prev.map(i => i.key === key ? { ...i, product } : i));
+    setItems(prev => prev.map(i =>
+      i.key === key ? { ...i, product, price: product ? String(product.price) : '' } : i
+    ));
   }
 
   function setItemQuantity(key, value) {
     const parsed = parseInt(value, 10);
-    if (isNaN(parsed) || parsed < 1) return;
-    setItems(prev => prev.map(i => i.key === key ? { ...i, quantity: parsed } : i));
+    if (!isNaN(parsed) && parsed >= 1) {
+      setItems(prev => prev.map(i => i.key === key ? { ...i, quantity: parsed } : i));
+    }
+  }
+
+  function adjustQuantity(key, delta) {
+    setItems(prev => prev.map(i =>
+      i.key === key ? { ...i, quantity: Math.max(1, i.quantity + delta) } : i
+    ));
+  }
+
+  function setItemPrice(key, value) {
+    setItems(prev => prev.map(i => i.key === key ? { ...i, price: value } : i));
   }
 
   function handleSubmit(e) {
@@ -99,7 +115,7 @@ export function AdminSaleNewPage() {
         <h1 className="font-colab text-2xl font-bold text-gray-800">{t('admin.new_sale')}</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
         <Select
           label={`${t('admin.payment_method')} *`}
           value={paymentMethod}
@@ -115,25 +131,25 @@ export function AdminSaleNewPage() {
           <label className="text-sm font-medium text-gray-700 block mb-3">
             {t('admin.products')}
           </label>
-          <div className="rounded-xl border border-gray-200 overflow-hidden">
+          <div className="rounded-xl border border-gray-200 overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Producto</th>
-                  <th className="text-right px-4 py-3 font-medium text-gray-600 w-28">{t('admin.unit_price')}</th>
-                  <th className="text-right px-4 py-3 font-medium text-gray-600 w-28">{t('admin.quantity')}</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600 min-w-[200px]">Producto</th>
+                  <th className="text-right px-4 py-3 font-medium text-gray-600 w-32">{t('admin.unit_price')}</th>
+                  <th className="text-center px-4 py-3 font-medium text-gray-600 w-36">{t('admin.quantity')}</th>
                   <th className="text-right px-4 py-3 font-medium text-gray-600 w-28">{t('admin.subtotal')}</th>
                   <th className="w-10" />
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {items.map(item => {
-                  const subtotal = item.product
-                    ? parseFloat(item.product.price) * item.quantity
-                    : null;
+                  const price = parseFloat(item.price);
+                  const subtotal = item.product && !isNaN(price) ? price * item.quantity : null;
                   const excludeIds = selectedProductIds.filter(id => id !== item.product?.id);
                   return (
                     <tr key={item.key}>
+                      {/* Product selector */}
                       <td className="px-4 py-3">
                         <ProductSearchInput
                           value={item.product}
@@ -141,21 +157,54 @@ export function AdminSaleNewPage() {
                           excludeIds={excludeIds}
                         />
                       </td>
-                      <td className="px-4 py-3 text-right text-gray-500">
-                        {item.product ? formatPrice(item.product.price) : '—'}
-                      </td>
+
+                      {/* Editable unit price */}
                       <td className="px-4 py-3">
                         <input
                           type="number"
-                          min="1"
-                          value={item.quantity}
-                          onChange={(e) => setItemQuantity(item.key, e.target.value)}
-                          className="w-full text-right rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent"
+                          min="0"
+                          step="0.01"
+                          value={item.price}
+                          onChange={(e) => setItemPrice(item.key, e.target.value)}
+                          disabled={!item.product}
+                          placeholder="0.00"
+                          className={`w-full text-right rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400 ${spinnerless}`}
                         />
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-gray-800">
+
+                      {/* Quantity with +/- controls */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => adjustQuantity(item.key, -1)}
+                            className="hidden sm:flex w-7 h-7 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 hover:border-gray-400 text-base leading-none transition-colors flex-shrink-0"
+                          >
+                            −
+                          </button>
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.quantity}
+                            onChange={(e) => setItemQuantity(item.key, e.target.value)}
+                            className={`w-12 text-center rounded-lg border border-gray-300 px-1 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent ${spinnerless}`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => adjustQuantity(item.key, 1)}
+                            className="hidden sm:flex w-7 h-7 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 hover:border-gray-400 text-base leading-none transition-colors flex-shrink-0"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+
+                      {/* Computed subtotal */}
+                      <td className="px-4 py-3 text-right font-medium text-gray-800 whitespace-nowrap">
                         {subtotal !== null ? formatPrice(subtotal) : '—'}
                       </td>
+
+                      {/* Remove button */}
                       <td className="px-2 py-3 text-center">
                         <button
                           type="button"

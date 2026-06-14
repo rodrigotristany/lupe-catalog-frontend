@@ -1,71 +1,74 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { getAdminProducts } from '../../api/admin';
 import { formatPrice } from '../../utils/formatPrice';
 import { useDebounce } from '../../hooks/useDebounce';
 
 export function ProductSearchInput({ value, onSelect, excludeIds = [] }) {
   const { t } = useTranslation();
-  const [inputValue, setInputValue] = useState(value?.name_es ?? '');
-  const [isTyping, setIsTyping] = useState(false);
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const [highlighted, setHighlighted] = useState(0);
-  const debouncedQuery = useDebounce(inputValue, 300);
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
+  const debouncedQuery = useDebounce(query, 300);
+  const containerRef = useRef(null);
+  const triggerRef = useRef(null);
+  const searchRef = useRef(null);
 
-  useEffect(() => {
-    if (!value) {
-      if (!isTyping) setInputValue('');
-    } else {
-      setInputValue(value.name_es);
-      setIsTyping(false);
+  function openDropdown() {
+    const rect = triggerRef.current?.getBoundingClientRect();
+    if (rect) {
+      setDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value?.id]);
+    setOpen(true);
+  }
+
+  // Auto-focus search input when opened
+  useEffect(() => {
+    if (open) {
+      setQuery('');
+      setHighlighted(0);
+      const timer = setTimeout(() => searchRef.current?.focus(), 0);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    function handleOutside(e) {
+      if (!containerRef.current?.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [open]);
+
+  // Close on scroll so the fixed dropdown doesn't drift away from the trigger
+  useEffect(() => {
+    if (!open) return;
+    function handleScroll() { setOpen(false); }
+    window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('scroll', handleScroll, true);
+  }, [open]);
 
   const { data: resultsData } = useQuery({
-    queryKey: ['admin', 'products', 'search', debouncedQuery],
-    queryFn: () => getAdminProducts({ search: debouncedQuery, per_page: 20 }),
-    enabled: isTyping && debouncedQuery.length > 0,
-    staleTime: 10_000,
+    queryKey: ['admin', 'products', 'selector', debouncedQuery],
+    queryFn: () => getAdminProducts({ ...(debouncedQuery ? { search: debouncedQuery } : {}), per_page: 50 }),
+    enabled: open,
+    staleTime: 30_000,
   });
 
   const allProducts = Array.isArray(resultsData) ? resultsData : (resultsData?.items ?? []);
   const products = allProducts.filter(p => !excludeIds.includes(p.id));
 
-  function handleInputChange(e) {
-    setInputValue(e.target.value);
-    setIsTyping(true);
-    if (value) onSelect(null);
-    setOpen(true);
-    setHighlighted(0);
-  }
-
-  function handleFocus() {
-    if (isTyping && inputValue) setOpen(true);
-  }
-
-  function handleBlur() {
-    setOpen(false);
-    if (value) {
-      setInputValue(value.name_es);
-      setIsTyping(false);
-    } else {
-      setInputValue('');
-      setIsTyping(false);
-    }
-  }
-
   function handleSelect(product) {
-    setInputValue(product.name_es);
-    setIsTyping(false);
-    setOpen(false);
     onSelect(product);
+    setOpen(false);
   }
 
   function handleKeyDown(e) {
-    if (!open || products.length === 0) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       setHighlighted(h => Math.min(h + 1, products.length - 1));
@@ -77,43 +80,62 @@ export function ProductSearchInput({ value, onSelect, excludeIds = [] }) {
       if (products[highlighted]) handleSelect(products[highlighted]);
     } else if (e.key === 'Escape') {
       setOpen(false);
-      if (value) setInputValue(value.name_es);
-      else { setInputValue(''); setIsTyping(false); }
     }
   }
 
   return (
-    <div className="relative">
-      <div className="relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          placeholder={t('admin.search_product')}
-          className="w-full pl-8 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent"
+    <div ref={containerRef}>
+      {/* Trigger button — height never changes */}
+      <button
+        ref={triggerRef}
+        type="button"
+        onClick={() => open ? setOpen(false) : openDropdown()}
+        className="w-full flex items-center justify-between rounded-lg border border-gray-300 px-3 py-2 text-sm text-left hover:border-lupe-400 focus:outline-none focus:ring-2 focus:ring-lupe-400 focus:border-transparent transition-colors"
+      >
+        <span className={`truncate ${value ? 'font-medium text-gray-800' : 'text-gray-400'}`}>
+          {value ? value.name_es : t('admin.search_product')}
+        </span>
+        <ChevronDown
+          size={14}
+          className={`text-gray-400 flex-shrink-0 ml-2 transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
         />
-      </div>
-      {open && products.length > 0 && (
+      </button>
+
+      {/* Fixed dropdown — overlays everything, unaffected by ancestor overflow */}
+      {open && (
         <div
-          onMouseDown={e => e.preventDefault()}
-          className="absolute z-50 top-full left-0 right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg max-h-48 overflow-y-auto"
+          className="fixed z-50 bg-white rounded-lg border border-gray-200 shadow-lg"
+          style={{ top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width }}
         >
-          {products.map((p, idx) => (
-            <div
-              key={p.id}
-              onClick={() => handleSelect(p)}
-              className={`px-3 py-2 cursor-pointer flex items-center justify-between ${
-                idx === highlighted ? 'bg-lupe-50' : 'hover:bg-gray-50'
-              }`}
-            >
-              <span className="font-medium text-gray-800 text-sm truncate pr-2">{p.name_es}</span>
-              <span className="text-xs text-gray-500 flex-shrink-0">{formatPrice(p.price)}</span>
-            </div>
-          ))}
+          <div className="p-2 border-b border-gray-100">
+            <input
+              ref={searchRef}
+              type="text"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setHighlighted(0); }}
+              onKeyDown={handleKeyDown}
+              placeholder={t('admin.search_product')}
+              className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-md outline-none focus:ring-1 focus:ring-lupe-400 focus:border-lupe-400"
+            />
+          </div>
+          <div className="max-h-52 overflow-y-auto">
+            {products.length === 0 ? (
+              <p className="px-3 py-3 text-sm text-gray-400 text-center">Sin resultados</p>
+            ) : (
+              products.map((p, idx) => (
+                <div
+                  key={p.id}
+                  onMouseDown={() => handleSelect(p)}
+                  className={`px-3 py-2 cursor-pointer flex items-center justify-between gap-2 ${
+                    idx === highlighted ? 'bg-lupe-50' : 'hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="font-medium text-gray-800 text-sm truncate">{p.name_es}</span>
+                  <span className="text-xs text-gray-500 flex-shrink-0">{formatPrice(p.price)}</span>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
     </div>
