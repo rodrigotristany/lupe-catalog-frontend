@@ -13,6 +13,6 @@ export function useCreateSale() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createSale,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'sales'] }),
+    onSuccess: () => queryClient.removeQueries({ queryKey: ['admin', 'sales'] }),
   });
 }
