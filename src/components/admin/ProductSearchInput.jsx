@@ -25,13 +25,10 @@ export function ProductSearchInput({ value, onSelect, excludeIds = [] }) {
     setOpen(true);
   }
 
-  // Auto-focus search input when opened
   useEffect(() => {
     if (open) {
       setQuery('');
       setHighlighted(0);
-      const timer = setTimeout(() => searchRef.current?.focus(), 0);
-      return () => clearTimeout(timer);
     }
   }, [open]);
 
